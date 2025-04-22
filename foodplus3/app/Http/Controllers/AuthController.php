@@ -11,13 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    // Menampilkan halaman login
     public function showLoginForm()
     {
         return view('auth.login');
     }
-
-    // Proses login
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -35,7 +32,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+            return redirect()->intended(route('dashboard.user'));
         }
 
         return back()->withErrors([
@@ -43,7 +40,6 @@ class AuthController extends Controller
         ])->withInput($request->except('password'));
     }
 
-    // Menampilkan halaman registrasi
     public function showRegistrationForm()
     {
         return view('auth.register');

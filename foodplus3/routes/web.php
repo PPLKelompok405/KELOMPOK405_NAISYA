@@ -3,14 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
+// Route utama langsung ke halaman dashboard guest
 Route::get('/', function () {
-    return redirect()->route('dashboard');
-});
+    return view('dashboard.guest');
+})->name('dashboard.guest');
 
-// Dashboard dapat diakses oleh semua pengguna (guest dan yang sudah login)
+// Route dashboard untuk user yang sudah login
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+    return view('dashboard.user');
+})->middleware('auth')->name('dashboard.user');
 
 // Route untuk autentikasi
 Route::middleware('guest')->group(function () {
@@ -32,7 +33,7 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/donate', function () {
         // Logic untuk menyimpan donasi
-        return redirect()->route('dashboard')->with('success', 'Donasi berhasil ditambahkan!');
+        return redirect()->route('dashboard.user')->with('success', 'Donasi berhasil ditambahkan!');
     })->name('donate.store');
     
     // Logout
